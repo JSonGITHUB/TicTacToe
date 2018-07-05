@@ -8,8 +8,7 @@ body {
     top:0px;
     left:0px;
     background-color: #222;
-    color:#888;
-    position: absolute;
+    color:#FFF;
 }
 .wrapper {
     font-size: 100%;
@@ -106,7 +105,7 @@ header {
     grid-auto-rows: 100%;
 }
 .score {
-    color:ghostwhite;
+    color:#00FF00;
 }
 .player {
     color:#888;
@@ -241,7 +240,7 @@ const undo = () => {
 }
 </script>
 <div class="wrapper">
-    <header class="fullWidth"><div>TICK - TAC - TOE</div><div id="instruction" onclick="initGame()"></div><div id="scoreboard"></div></header>
+    <header class="fullWidth"><div>Tic-Tac-Toe</div><div id="instruction" onclick="initGame()"></div><div id="scoreboard"></div></header>
     <div id="gameboard" class="nested" onclick="selectBox(event)">
     </div>
     <div class="fullWidth button"><button  onclick="undo()">UNDO</button></div>
