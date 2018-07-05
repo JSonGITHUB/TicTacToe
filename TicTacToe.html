@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+    overflow: hidden;
+    padding: 0px;
+    margin: 0px;
+    top:0px;
+    left:0px;
+    background-color: #222;
+    color:#888;
+}
+.wrapper {
+    font-size: 100%;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.nested {
+    overflow:hidden;
+    margin: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 100px);
+    height: calc(90% - 105px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 33.3%;
+    max-width: 800px;
+    min-height: 200px;
+}
+.nested > div:hover {
+    background-color: #00ff00;
+    color: #000;
+}
+.wrapper > div {
+}
+.wrapper > div:nth-child(odd) {
+}
+.nested > div {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    font: 20vh sans-serif;
+    border:#aaa 1px solid;
+    text-align: center;
+}
+.nested > div:nth-child(1) {
+    border-top: #000;
+    border-left: #000;
+}
+.nested > div:nth-child(2) {
+    border-top: #000;
+}
+.nested > div:nth-child(3) {
+    border-top: #000;
+    border-right: #000;
+}
+.nested > div:nth-child(4) {
+    border-left: #000;
+}
+.nested > div:nth-child(6) {
+    border-right: #000;
+}
+.nested > div:nth-child(7) {
+    border-bottom: #000;
+    border-left: #000;
+}
+.nested > div:nth-child(8) {
+    border-bottom: #000;
+}
+.nested > div:nth-child(9) {
+    border-right: #000;
+    border-bottom: #000;
+}
+.fullWidth {
+    width: 100%;
+    height: 5%;
+    font-weight: bold;
+    background-color: #111;
+}
+.button {
+    text-align: center;
+    font: 3vh sans-serif;
+}
+.button:hover {
+    background-color: #444;
+}
+header {
+    text-align: center;
+    margin-top: 10px;
+    font: 3vh sans-serif;
+    overflow:hidden;
+    width: calc(100% - 100px);
+    height: calc(90% - 100px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 5%;
+}
+#scoreboard {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: 100%;
+}
+.score {
+    color:ghostwhite;
+}
+.player {
+    color:#888;
+}
+.button {
+    color: #00ff00;
+    padding-left: 30px;
+}
+.highlight {
+    color: #00ff00;
+}
+</style>
+<body onload="initGame()">
+<script>
+const players = ["X","O"];
+let scores = [0,0];
+let boxes = ["","","","","","","","",""];
+let turn = 0;
+let lastBox = 0;
+let lastBoxPreviousValue = 0;
+let currentPlayerId = 0;
+let winning = false;
+let selectPlayerId = () => currentPlayerId = Math.floor(Math.random() * players.length);
+let getOtherPlayer = () => { 
+    if (currentPlayerId === 0) { currentPlayerId++ } 
+    else { currentPlayerId-- }
+};
+const initGame = () => {
+    turn = 0;
+    winning = false;
+    document.getElementById("gameboard").innerHTML = "";
+    boxes = ["","","","","","","","",""];
+    document.getElementById("instruction").innerHTML = "";
+    scores.map((score,i) => {
+        document.getElementById("scoreboard").innerHTML = "<div class='player'>" + players[0] + "'s: </div><div class='score'>" +  + scores[0] + "</div><div> vs. </div><div class='player'>" + players[1] + "'s:</div><div class='score'>" + scores[1] + "</div>";
+    })
+    boxes.map((box, index) => {
+        document.getElementById("gameboard").innerHTML += "<div id='"+index+"'></div>";
+    })
+    document.getElementById("instruction").innerHTML = players[currentPlayerId] + "'s turn now";
+};
+const selectBox = (e) => {
+    let player = players[currentPlayerId];
+    if (!winning && e.target.innerHTML === "") { 
+        let box = e.target.id;
+        lastBoxPreviousValue = boxes[box];
+        boxes[box] = player;
+        e.target.innerHTML = player;
+        if (!checkForWinner()) {
+            getOtherPlayer();
+            lastBox = box;
+            turn++
+            document.getElementById("instruction").innerHTML = players[currentPlayerId] + "'s turn now";
+            if (turn == 9) {
+                turn = 0;
+                document.getElementById("instruction").innerHTML = "It's a draw! <button>Re-Match!</button>" ;
+             
+            }
+        }   
+    } else {
+        console.log(player + " WINS!!!!!!!!!!!!!!!!!!!!!!!! turn = " + turn) 
+    }
+    console.log("boxes: " + boxes)
+};
+
+const checkForWinner = () => {
+    let winner = winning;
+    let player = players[currentPlayerId];
+    if (turn > 3) {
+        wins.map((win) => {
+    //        console.log(player + " has boxes? " + JSON.stringify(win))
+            win.boxes.map((box,index) => {
+    //            console.log(player + " has box? " + box + " contains " + boxes[box])
+                if (boxes[box] === player) { 
+//                    console.log(player + " has box " + box)
+                    if (index === 0) { winner = true }
+                } else {
+//                    console.log(player + " doesn't have box " + box)
+                    winner = false;
+
+                }
+            })
+
+            if (winner || winning) {
+                if (winner) {
+                    scores[currentPlayerId]++
+                    win.boxes.map((box,index) => {
+                         if (boxes[box] === player) { 
+//                            console.log("winner - "+winner+" - index = " + index)
+                            document.getElementById(box).className += " highlight";
+                            if (index === 0) { winner = true }
+                        }
+                    })
+                }
+                console.log(player + " WINS!!!!")
+                winning = true;
+                
+                scores.map((score,i) => {
+                    document.getElementById("scoreboard").innerHTML = "<div class='player'>" + players[0] + "'s: </div><div class='score'>" +  + scores[0] + "</div><div> vs. </div><div class='player'>" + players[1] + "'s:</div><div class='score'>" + scores[1] + "</div>";
+                })
+                document.getElementById("instruction").innerHTML = player + " WINS!!!! <button>Re-Match!</button>";
+            } else {
+                console.log("No winners yet!")
+            }
+
+        })
+    }
+
+    return winning
+
+};
+    
+const wins = [
+    { boxes: [0,4,8] },
+    { boxes: [2,4,6] },
+    { boxes: [0,1,2] },
+    { boxes: [3,4,5] },
+    { boxes: [6,7,8] },
+    { boxes: [0,3,6] },
+    { boxes: [1,4,7] },
+    { boxes: [2,5,8] },
+]
+const undo = () => {
+    if (lastBoxPreviousValue != "0" && !winning) {
+        boxes[lastBox] = lastBoxPreviousValue;
+        document.getElementById(lastBox).innerHTML = lastBoxPreviousValue;
+        lastBoxPreviousValue = "0";
+        getOtherPlayer();
+        turn--
+        console.log("boxes: " + boxes)
+    }
+}
+</script>
+<div class="wrapper">
+    <header class="fullWidth"><div>TICK - TAC - TOE</div><div id="instruction" onclick="initGame()"></div><div id="scoreboard"></div></header>
+    <div id="gameboard" class="nested" onclick="selectBox(event)">
+    </div>
+    <div class="fullWidth button"><button  onclick="undo()">UNDO</button></div>
+</div>
+</body>
