@@ -110,25 +110,28 @@ header {
     background-color: #111;
 }
 #scoreboard {
+    width:100%;
     margin: auto;
     
 }
 .title { 
     padding-left:10px;
     margin: auto;
+    margin-top: 2px;
 }
 .score {
     font-weight: bold;
     color:#FFF;
 }
 .player {
+    float: left;
+    margin: auto;
+    width: 40%;
     color:#888;
 }
 #instruction {
+    margin: auto;
     margin-top:2px;
-    margin-bottom: auto;
-    margin-left:10px;
-    margin-right:10px;
     color:#00ff00;
 }
 .highlight {
@@ -154,6 +157,13 @@ let getOtherPlayer = () => {
     if (currentPlayerId === 0) { currentPlayerId++ } 
     else { currentPlayerId-- }
 };
+const getScore = () => {
+    const score = "<div class='player'>" + players[0] + 
+                "'s: <span class='score'>" + scores[0] + 
+                "</span> - </div><div class='player'> " + players[1] +
+                        "'s: <span class='score'>" + scores[1] + "</span></div>";
+    return score
+}
 const initGame = () => {
     turn = 0;
     winning = false;
@@ -161,7 +171,7 @@ const initGame = () => {
     boxes = ["","","","","","","","",""];
     document.getElementById("instruction").innerHTML = "";
     scores.map((score,i) => {
-        document.getElementById("scoreboard").innerHTML = "<span class='player'>" + players[0] + "'s: </span><span class='score'>" +  + scores[0] + "</span><span class='player'> - " + players[1] + "'s: </span><span class='score'>" + scores[1] + "</span>";
+        document.getElementById("scoreboard").innerHTML = getScore();
     })
     boxes.map((box, index) => {
         document.getElementById("gameboard").innerHTML += "<div id='"+index+"'></div>";
@@ -227,7 +237,7 @@ const checkForWinner = () => {
                 winning = true;
                 
                 scores.map((score,i) => {
-                    document.getElementById("scoreboard").innerHTML = "<span class='player'>" + players[0] + "'s: </span><span class='score'>" +  + scores[0] + "</span><span class='player'> - " + players[1] + "'s: </span><span class='score'>" + scores[1] + "</span>";
+                    document.getElementById("scoreboard").innerHTML =  getScore();
                 })
                 document.getElementById("instruction").innerHTML = player + " WINS!!!!";
                 document.getElementById("footer").innerHTML = "<h2 class='buttonFooter' onclick='initGame()'>Re-Match!</h2>"
