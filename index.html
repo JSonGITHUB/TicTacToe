@@ -40,10 +40,6 @@ body {
     background-color: #00ff00;
     color: #000;
 }
-.wrapper > div {
-}
-.wrapper > div:nth-child(odd) {
-}
 .nested > div {
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */
@@ -106,27 +102,52 @@ header {
     font: sans-serif;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    background-color: #111;
+    background-color:#111;
 }
 #scoreboard {
-    width:100%;
+    width:calc(100%-20);
     margin: auto;
+    margin-right: 20px;
+    margin-top: 2px;
+    text-align: right;
+    position: relative;
+    right:0px;
     
 }
-.title { 
-    padding-left:10px;
+.scoreboardNarrow {
+    width:calc(100%-20);
+    margin: auto;
+    margin-right: 20px;
+    margin-top: 2px;
+    text-align: right;
+    position: relative;
+    right:0px;
+    
+}
+.title {
+    width:calc(100%-20);
     margin: auto;
     margin-top: 2px;
 }
 .score {
+    margin-right:20px;
     font-weight: bold;
     color:#FFF;
 }
 .player {
     float: left;
     margin: auto;
-    width: 40%;
+    margin-left:20px;
     color:#888;
+    text-align: right;
+}
+.playerMobile {
+    float: left;
+    margin: auto;
+    margin-left:20px;
+    color:#888;
+    text-align: right;
+    width:100%;
 }
 #instruction {
     margin: auto;
@@ -140,12 +161,23 @@ footer {
     position: fixed;
     bottom:10px;
 }
+
 </style>
-<body onload="initGame()">
+<body onload="initGame()" onresize="redrawContent()">
 <script>
 const players = ["X","O"];
 let scores = [0,0];
 let boxes = ["","","","","","","","",""];
+const wins = [
+    { boxes: [0,4,8] },
+    { boxes: [2,4,6] },
+    { boxes: [0,1,2] },
+    { boxes: [3,4,5] },
+    { boxes: [6,7,8] },
+    { boxes: [0,3,6] },
+    { boxes: [1,4,7] },
+    { boxes: [2,5,8] },
+]
 let turn = 0;
 let lastBox = 0;
 let lastBoxPreviousValue = 0;
@@ -156,27 +188,43 @@ let getOtherPlayer = () => {
     if (currentPlayerId === 0) { currentPlayerId++ } 
     else { currentPlayerId-- }
 };
+const redrawContent = () => {
+    const header = document.getElementsByTagName("header")[0];
+    if (header.offsetWidth<600){
+        header.innerHTML = "<h2 class='title'>Tic-Tac-Toe<div id='instruction'></div></h2><div></div><h2 id='scoreboard' class='scoreboardNarrow'></h2>"
+    } else {
+        header.innerHTML = "<h2 class='title'>Tic-Tac-Toe</h2><h2 id='instruction'></h2><h2 id='scoreboard'></h2>"
+    }
+    getInstructions();
+    getScore();
+}
 const getScore = () => {
-    const score = "<div class='player'>" + players[0] + 
-                "'s: <span class='score'>" + scores[0] + 
-                "</span> - </div><div class='player'> " + players[1] +
-                        "'s: <span class='score'>" + scores[1] + "</span></div>";
-    return score
+    const scoreboard = document.getElementById("scoreboard");
+    const header = document.getElementsByTagName("header")[0];
+    scoreboard.innerHTML = "";
+    scores.map((score,i) => {
+        if (header.offsetWidth<600){ 
+            scoreboard.innerHTML += "<div class='playerMobile'>" + players[i] + 
+                "'s: <span class='score'>" + scores[i] + "</span></div>";
+        } else {
+            scoreboard.innerHTML += "<div class='player'>" + players[i] + 
+                "'s: <span class='score'>" + scores[i] + "</span></div>";
+        }
+    })
 }
 const initGame = () => {
     turn = 0;
     winning = false;
-    document.getElementById("gameboard").innerHTML = "";
+    const gameboard = document.getElementById("gameboard");
+    const instruction = document.getElementById("instruction");
+    const footer = document.getElementById("footer");
+    gameboard.innerHTML = "";
+    instruction.innerHTML = "";
+    footer.innerHTML = "";
     boxes = ["","","","","","","","",""];
-    document.getElementById("instruction").innerHTML = "";
-    scores.map((score,i) => {
-        document.getElementById("scoreboard").innerHTML = getScore();
-    })
-    boxes.map((box, index) => {
-        document.getElementById("gameboard").innerHTML += "<div id='"+index+"'></div>";
-    })
-    document.getElementById("footer").innerHTML = "";
-    document.getElementById("instruction").innerHTML = players[currentPlayerId] + "'s turn<br/>";
+    getScore();
+    boxes.map((box, index) => gameboard.innerHTML += "<div id='"+index+"'></div>");
+    instruction.innerHTML = players[currentPlayerId] + "'s turn";
 };
 const selectBox = (e) => {
     let player = players[currentPlayerId];
@@ -189,93 +237,68 @@ const selectBox = (e) => {
             getOtherPlayer();
             lastBox = box;
             turn++
-            document.getElementById("instruction").innerHTML = players[currentPlayerId] + "'s turn";
-            document.getElementById("footer").innerHTML = "<h2 class='buttonFooter' onclick='undo()'>UNDO</h2>"
-            if (turn == 9) {
-                turn = 0;
-                document.getElementById("instruction").innerHTML = "It's a draw!" ;
-                document.getElementById("footer").innerHTML = "<h2 class='buttonFooter' onclick='initGame()'>Re-Match!</h2>"
-            }
+            getInstructions();
         }   
-    } else {
-        console.log(player + " WINS!!!!!!!!!!!!!!!!!!!!!!!! turn = " + turn) 
     }
-    console.log("boxes: " + boxes)
 };
-
+const getInstructions = () => {
+    const instruction = document.getElementById("instruction");
+    const footer = document.getElementById("footer");
+    instruction.innerHTML = players[currentPlayerId] + "'s turn";
+    footer.innerHTML = "<h2 class='buttonFooter' onclick='undo()'>UNDO</h2>";
+    if (turn == 9) {
+        turn = 0;
+        instruction.innerHTML = "It's a draw!" ;
+        footer.innerHTML = "<h2 class='buttonFooter' onclick='initGame()'>Re-Match!</h2>"
+    }
+}
+const addFooter = () => {
+    const footer = document.getElementById("footer");
+    footer.innerHTML = "<h2 class='buttonFooter' onclick='initGame()'>Re-Match!</h2>";
+}
 const checkForWinner = () => {
     let winner = winning;
     let player = players[currentPlayerId];
     if (turn > 3) {
         wins.map((win) => {
-    //        console.log(player + " has boxes? " + JSON.stringify(win))
             win.boxes.map((box,index) => {
-    //            console.log(player + " has box? " + box + " contains " + boxes[box])
-                if (boxes[box] === player) { 
-//                    console.log(player + " has box " + box)
-                    if (index === 0) { winner = true }
-                } else {
-//                    console.log(player + " doesn't have box " + box)
-                    winner = false;
-
-                }
+                if (boxes[box] === player) { if (index === 0) { winner = true }} 
+                else { winner = false }
             })
-
             if (winner || winning) {
                 if (winner) {
                     scores[currentPlayerId]++
                     win.boxes.map((box,index) => {
                          if (boxes[box] === player) { 
-//                            console.log("winner - "+winner+" - index = " + index)
                             document.getElementById(box).className += " highlight";
                             if (index === 0) { winner = true }
                         }
                     })
                 }
-                console.log(player + " WINS!!!!")
                 winning = true;
-                
-                scores.map((score,i) => {
-                    document.getElementById("scoreboard").innerHTML =  getScore();
-                })
+                getScore();
                 document.getElementById("instruction").innerHTML = player + " WINS!!!!";
                 document.getElementById("footer").innerHTML = "<h2 class='buttonFooter' onclick='initGame()'>Re-Match!</h2>"
-                
-            } else {
-                console.log("No winners yet!")
             }
 
         })
     }
-
     return winning
-
 };
-    
-const wins = [
-    { boxes: [0,4,8] },
-    { boxes: [2,4,6] },
-    { boxes: [0,1,2] },
-    { boxes: [3,4,5] },
-    { boxes: [6,7,8] },
-    { boxes: [0,3,6] },
-    { boxes: [1,4,7] },
-    { boxes: [2,5,8] },
-]
 const undo = () => {
+    const instruction = document.getElementById("instruction");
     if (lastBoxPreviousValue != "0" && !winning) {
         boxes[lastBox] = lastBoxPreviousValue;
         document.getElementById(lastBox).innerHTML = lastBoxPreviousValue;
         lastBoxPreviousValue = "0";
         getOtherPlayer();
-        document.getElementById("instruction").innerHTML = players[currentPlayerId] + "'s turn<br/>";
+        instruction.innerHTML = players[currentPlayerId] + "'s turn";
         turn--
-        console.log("boxes: " + boxes)
     }
 }
 </script>
 <div class="wrapper">
-    <header class="fullWidth">
+    <header class="fullWidth wide">
         <h2 class="title">Tic-Tac-Toe</h2><h2 id="instruction"></h2><h2 id="scoreboard"></h2>
     </header>
     <div id="gameboard" class="nested" onclick="selectBox(event)"></div>
