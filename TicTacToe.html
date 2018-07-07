@@ -131,21 +131,18 @@ header {
     margin-top: 2px;
 }
 .score {
-    margin-right:20px;
     font-weight: bold;
     color:#FFF;
 }
 .player {
+    margin-right:10px;
     float: left;
-    margin: auto;
-    margin-left:20px;
     color:#888;
     text-align: right;
 }
 .playerMobile {
-    float: left;
     margin: auto;
-    margin-left:20px;
+    margin-right:20px;
     color:#888;
     text-align: right;
     width:100%;
@@ -191,7 +188,7 @@ let getOtherPlayer = () => {
 };
 const redrawContent = () => {
     const header = document.getElementsByTagName("header")[0];
-    if (header.offsetWidth<600){
+    if (header.offsetWidth<500){
         header.innerHTML = "<h2 class='title'>Tic-Tac-Toe<div id='instruction'></div></h2><div></div><h2 id='scoreboard' class='scoreboardNarrow'></h2>"
     } else {
         header.innerHTML = "<h2 class='title'>Tic-Tac-Toe</h2><h2 id='instruction'></h2><h2 id='scoreboard'></h2>"
@@ -204,7 +201,7 @@ const getScore = () => {
     const header = document.getElementsByTagName("header")[0];
     scoreboard.innerHTML = "";
     scores.map((score,i) => {
-        if (header.offsetWidth<600){ 
+        if (header.offsetWidth<500){ 
             scoreboard.innerHTML += "<div class='playerMobile'>" + players[i] + 
                 "'s: <span class='score'>" + scores[i] + "</span></div>";
         } else {
