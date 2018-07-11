@@ -191,7 +191,7 @@ let getOtherPlayer = () => {
 };
 const redrawContent = () => {
     const header = document.getElementsByTagName("header")[0];
-    if (header.offsetWidth<500){
+    if (header.offsetWidth<600){
         header.innerHTML = "<h2 class='title'>Tic-Tac-Toe<div id='instruction'></div></h2><div></div><h2 id='scoreboard' class='scoreboardNarrow'></h2>"
     } else {
         header.innerHTML = "<h2 class='title'>Tic-Tac-Toe</h2><h2 id='instruction'></h2><h2 id='scoreboard'></h2>"
