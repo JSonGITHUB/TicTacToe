@@ -19,6 +19,9 @@ body {
     color:#FFF;
     font-family: sans-serif;
 }
+h2 {
+    font: 4vw sans-serif; 
+}
 .wrapper {
     width: 100%;
     height: 100%;
@@ -45,7 +48,7 @@ body {
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
-    font: 15vh sans-serif;
+    font: 14vh sans-serif;
     border:#aaa 1px solid;
     text-align: center;
 }
@@ -188,7 +191,7 @@ let getOtherPlayer = () => {
 };
 const redrawContent = () => {
     const header = document.getElementsByTagName("header")[0];
-    if (header.offsetWidth<500){
+    if (header.offsetWidth<600){
         header.innerHTML = "<h2 class='title'>Tic-Tac-Toe<div id='instruction'></div></h2><div></div><h2 id='scoreboard' class='scoreboardNarrow'></h2>"
     } else {
         header.innerHTML = "<h2 class='title'>Tic-Tac-Toe</h2><h2 id='instruction'></h2><h2 id='scoreboard'></h2>"
@@ -201,13 +204,13 @@ const getScore = () => {
     const header = document.getElementsByTagName("header")[0];
     scoreboard.innerHTML = "";
     scores.map((score,i) => {
-        if (header.offsetWidth<500){ 
-            scoreboard.innerHTML += "<div class='playerMobile'>" + players[i] + 
-                "'s: <span class='score'>" + scores[i] + "</span></div>";
-        } else {
+        //if (header.offsetWidth<500){ 
+          //  scoreboard.innerHTML += "<div class='playerMobile'>" + players[i] + 
+                //"'s: <span class='score'>" + scores[i] + "</span></div>";
+        //} else {
             scoreboard.innerHTML += "<div class='player'>" + players[i] + 
                 "'s: <span class='score'>" + scores[i] + "</span></div>";
-        }
+        //}
     })
 }
 const initGame = () => {
