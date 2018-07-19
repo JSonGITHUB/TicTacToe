@@ -26,8 +26,6 @@ class TicTacToe {
         } else {
             header.innerHTML = "<h2 class='title'>Tic-Tac-Toe</h2><h2 id='instruction'></h2><h2 id='scoreboard'></h2>"
         }
-        //getInstructions();
-        //getScore();
         document.getElementById("scoreboard").innerHTML = scoreDisplay; 
         document.getElementById("instruction").innerHTML = instructionDisplay;
     }
@@ -73,7 +71,7 @@ class TicTacToe {
         const instruction = document.getElementById("instruction");
         const footer = document.getElementById("footer");
         instruction.innerHTML = this.players[this.currentPlayerId] + "'s turn";
-        footer.innerHTML = "<h2 class='buttonFooter' onclick='this.undo()'>UNDO</h2>";
+        footer.innerHTML = "<h2 class='buttonFooter' onclick='game.undo()'>UNDO</h2>";
         if (this.turn == 9) {
             this.turn = 0;
             instruction.innerHTML = "It's a draw!" ;
@@ -125,7 +123,7 @@ class TicTacToe {
     };
     undo() {
         const instruction = document.getElementById("instruction");
-        if (this.lastBoxPreviousValue != "0" && !winning) {
+        if (this.lastBoxPreviousValue != "0" && !this.winning) {
             this.boxes[this.lastBox] = this.lastBoxPreviousValue;
             document.getElementById(this.lastBox).innerHTML = this.lastBoxPreviousValue;
             this.lastBoxPreviousValue = "0";
