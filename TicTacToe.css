@@ -7,9 +7,6 @@ body {
     color:#FFF;
     font-family: sans-serif;
 }
-h2 {
-    font: 4vw sans-serif; 
-}
 .wrapper {
     width: 100%;
     height: 100%;
@@ -69,12 +66,15 @@ h2 {
     border-bottom: #000;
 }
 .buttonFooter {
+    font: 4vw sans-serif;
     color:#000;
     margin: auto;
+    margin-top:2vh;;
     max-width: 800px;
     width:90vw;
     background-color: #00ff00;
     height: auto;
+    text-align: center;
 }
 .fullWidth {
     width: 100%;
@@ -138,8 +138,4 @@ header {
 }
 .highlight {
     color: #00ff00;
-}
-footer {
-    position: fixed;
-    bottom:10px;
 }

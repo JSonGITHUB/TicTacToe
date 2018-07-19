@@ -11,46 +11,47 @@ class TicTacToe {
         this.lastBoxPreviousValue = 0;
         this.currentPlayerId = 0;
         this.winning = false;
-        this.getOtherPlayer = () => { 
-            if (this.currentPlayerId === 0) { this.currentPlayerId++ } 
-            else { this.currentPlayerId-- }
-        };
+        this.footer = document.getElementById("footer");
+        this.header = document.getElementsByTagName("header")[0];
+        this.scoreboard = document.getElementById("scoreboard");
+        this.instruction = document.getElementById("instruction");
+        this.gameboard = document.getElementById("gameboard");
+        this.footer.addEventListener('click', () => this.footerClick());
     }
-
+    getOtherPlayer() { 
+        if (this.currentPlayerId === 0) { this.currentPlayerId++ } 
+        else { this.currentPlayerId-- }
+    }
     redrawContent() {
-        const header = document.getElementsByTagName("header")[0];
-        let scoreDisplay = document.getElementById("scoreboard").innerHTML;
-        let instructionDisplay = document.getElementById("instruction").innerHTML;
-        if (header.offsetWidth<600){
-            header.innerHTML = "<h2 class='title'>Tic-Tac-Toe<div id='instruction'></div></h2><div></div><h2 id='scoreboard' class='scoreboardNarrow'></h2>"
+        let scoreDisplay = this.scoreboard.innerHTML;
+        let instructionDisplay = this.instruction.innerHTML;
+        if (this.header.offsetWidth<600){
+            this.header.innerHTML = "<h2 class='title'>Tic-Tac-Toe<div id='instruction'></div></h2><div></div><h2 id='scoreboard' class='scoreboardNarrow'></h2>"
         } else {
-            header.innerHTML = "<h2 class='title'>Tic-Tac-Toe</h2><h2 id='instruction'></h2><h2 id='scoreboard'></h2>"
+            this.header.innerHTML = "<h2 class='title'>Tic-Tac-Toe</h2><h2 id='instruction'></h2><h2 id='scoreboard'></h2>"
         }
-        document.getElementById("scoreboard").innerHTML = scoreDisplay; 
-        document.getElementById("instruction").innerHTML = instructionDisplay;
+        this.scoreboard = document.getElementById("scoreboard");
+        this.instruction = document.getElementById("instruction");
+        this.scoreboard.innerHTML = scoreDisplay; 
+        this.instruction.innerHTML = instructionDisplay;
     }
     getScore() {
-        const scoreboard = document.getElementById("scoreboard");
-        const header = document.getElementsByTagName("header")[0];
-        scoreboard.innerHTML = "";
+        this.scoreboard.innerHTML = "";
         this.scores.map((score,i) => {
-                scoreboard.innerHTML += "<div class='player'>" + this.players[i] + 
+                this.scoreboard.innerHTML += "<div class='player'>" + this.players[i] + 
                     "'s: <span class='score'>" + this.scores[i] + "</span></div>";
         })
     }
     initGame() {
         this.turn = 0;
         this.winning = false;
-        const gameboard = document.getElementById("gameboard");
-        const instruction = document.getElementById("instruction");
-        const footer = document.getElementById("footer");
-        gameboard.innerHTML = "";
-        instruction.innerHTML = "";
-        footer.innerHTML = "";
+        this.gameboard.innerHTML = "";
+        this.instruction.innerHTML = "";
+        this.footer.innerHTML = "";
         this.boxes = ["","","","","","","","",""];
         this.getScore();
-        this.boxes.map((box, index) => gameboard.innerHTML += "<div id='"+index+"'></div>");
-        instruction.innerHTML = this.players[this.currentPlayerId] + "'s turn";
+        this.boxes.map((box, index) => this.gameboard.innerHTML += "<div id='"+index+"'></div>");
+        this.instruction.innerHTML = this.players[this.currentPlayerId] + "'s turn";
     };
     selectBox(e) {
         let player = this.players[this.currentPlayerId];
@@ -68,19 +69,16 @@ class TicTacToe {
         }
     };
     getInstructions() {
-        const instruction = document.getElementById("instruction");
-        const footer = document.getElementById("footer");
-        instruction.innerHTML = this.players[this.currentPlayerId] + "'s turn";
-        footer.innerHTML = "<h2 class='buttonFooter' onclick='game.undo()'>UNDO</h2>";
+        this.instruction.innerHTML = this.players[this.currentPlayerId] + "'s turn";
+        this.footer.innerHTML = "UNDO";
         if (this.turn == 9) {
             this.turn = 0;
-            instruction.innerHTML = "It's a draw!" ;
-            footer.innerHTML = "<h2 class='buttonFooter' onclick='game.initGame()'>Re-Match!</h2>"
+            this.instruction.innerHTML = "It's a draw!" ;
+            this.footer.innerHTML = "Re-Match!"
         }
     }
     addFooter() {
-        const footer = document.getElementById("footer");
-        footer.innerHTML = "<h2 class='buttonFooter' onclick='game.initGame()'>Re-Match!</h2>";
+        this.footer.innerHTML = "Re-Match!";
     }
     checkForWinner() {
         const wins = [
@@ -113,22 +111,29 @@ class TicTacToe {
                     }
                     this.winning = true;
                     this.getScore();
-                    document.getElementById("instruction").innerHTML = player + " WINS!!!!";
-                    document.getElementById("footer").innerHTML = "<h2 class='buttonFooter' onclick='game.initGame()'>Re-Match!</h2>"
+                    this.instruction.innerHTML = player + " WINS!!!!";
+                    this.footer.innerHTML = "Re-Match!";
                 }
 
             })
         }
         return this.winning
     };
+    footerClick() {
+        if (this.footer.innerHTML.indexOf("UNDO")>-1) {
+            this.undo();
+        } else {
+            this.initGame();
+        }
+        
+    }
     undo() {
-        const instruction = document.getElementById("instruction");
         if (this.lastBoxPreviousValue != "0" && !this.winning) {
             this.boxes[this.lastBox] = this.lastBoxPreviousValue;
             document.getElementById(this.lastBox).innerHTML = this.lastBoxPreviousValue;
             this.lastBoxPreviousValue = "0";
             this.getOtherPlayer();
-            instruction.innerHTML = this.players[this.currentPlayerId] + "'s turn";
+            this.instruction.innerHTML = this.players[this.currentPlayerId] + "'s turn";
             this.turn--
         }
     }
