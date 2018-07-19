@@ -17,19 +17,11 @@ class TicTacToe {
         this.instruction = document.getElementById("instruction");
         this.gameboard = document.getElementById("gameboard");
         this.footer.addEventListener('click', () => this.footerClick());
+        this.initGame();
     }
     getOtherPlayer() { 
         if (this.currentPlayerId === 0) { this.currentPlayerId++ } 
         else { this.currentPlayerId-- }
-    }
-    redrawContent() {
-        let scoreDisplay = this.scoreboard.innerHTML;
-        let instructionDisplay = this.instruction.innerHTML;
-        this.header.innerHTML = "<div class='title'>Tic-Tac-Toe</div><div id='instruction'></div><div id='scoreboard'></div>"
-        this.scoreboard = document.getElementById("scoreboard");
-        this.instruction = document.getElementById("instruction");
-        this.scoreboard.innerHTML = scoreDisplay; 
-        this.instruction.innerHTML = instructionDisplay;
     }
     getScore() {
         this.scoreboard.innerHTML = "";
