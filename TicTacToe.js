@@ -26,9 +26,9 @@ class TicTacToe {
         let scoreDisplay = this.scoreboard.innerHTML;
         let instructionDisplay = this.instruction.innerHTML;
         if (this.header.offsetWidth<600){
-            this.header.innerHTML = "<h2 class='title'>Tic-Tac-Toe<div id='instruction'></div></h2><div></div><h2 id='scoreboard' class='scoreboardNarrow'></h2>"
+            this.header.innerHTML = "<div class='title'>Tic-Tac-Toe<div id='instruction'></div></div><div></div><div id='scoreboard' class='scoreboardNarrow'></div>"
         } else {
-            this.header.innerHTML = "<h2 class='title'>Tic-Tac-Toe</h2><h2 id='instruction'></h2><h2 id='scoreboard'></h2>"
+            this.header.innerHTML = "<div class='title'>Tic-Tac-Toe</div><div id='instruction'></div><div id='scoreboard'></div>"
         }
         this.scoreboard = document.getElementById("scoreboard");
         this.instruction = document.getElementById("instruction");

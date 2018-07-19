@@ -89,6 +89,7 @@ body {
     background-color: #444;
 }
 header {
+    font: 4vw sans-serif;
     position: fixed;
     font: sans-serif;
     display: grid;
